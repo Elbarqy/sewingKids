@@ -6,7 +6,7 @@ let verticalThreads;
 let horizontalThreads;
 const ctx = canvas.getContext("2d");
 const dim = Math.min(window.innerWidth, window.innerHeight) * 0.8
-canvas.width =dim
+canvas.width = dim
 canvas.height = dim
 const {width: canvasWidth, height: canvasHeight} = canvas;
 const threadWidth = 30;
@@ -60,7 +60,7 @@ const draw = (ctx, point, color) => {
     ctx.moveTo(point[0], point[1]);
 }
 
-const drawThreads= ()=> {
+const drawThreads = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     verticalThreads.map((thread, i) => {
@@ -105,7 +105,14 @@ const drawThreads= ()=> {
                 }
             }
             if (i === 0 && store.state[index - n] === 1) {
-                draw(ctx, point, "blue")
+                let temp;
+                if (i === 0 || i >= n) {
+                    temp = point
+                } else {
+                    temp = rest[i + 1]
+                    i+=1
+                }
+                draw(ctx, temp, "blue")
                 continue
             }
             if (i % 2 === 1 && i < n * 2) {
