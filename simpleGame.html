@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <link rel="stylesheet" href="style.css">
     <style>
       canvas {
         border: 1px solid #ccc;
@@ -12,11 +13,15 @@
     </style>
   </head>
   <body>
-    <div class="controls">
-      <button onclick="resetThreads()">Reset</button>
-      <button onclick="toggleAnimation()">Start/Stop</button>
+  <div class="container">
+
+    <div class="slider-container">
+      <div>number of Cols/Rows <span id="slider-value"></span> </div>
+      <input type="range" id="slider" min="3" max="18" value="4">
     </div>
-    <canvas id="canvas" width="400" height="400"></canvas>
+    <canvas id="canvas"></canvas>
+
+  </div>
     <script src="index.js"></script>
   </body>
 </html>
