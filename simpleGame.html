@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      canvas {
+        border: 1px solid #ccc;
+        cursor: crosshair;
+      }
+      .controls {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <button onclick="resetThreads()">Reset</button>
+      <button onclick="toggleAnimation()">Start/Stop</button>
+    </div>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script src="index.js"></script>
+  </body>
+</html>
