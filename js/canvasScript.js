@@ -9,7 +9,7 @@ const dim = Math.min(window.innerWidth, window.innerHeight) * 0.8
 canvas.width = dim
 canvas.height = dim
 const {width: canvasWidth, height: canvasHeight} = canvas;
-const threadWidth = 30;
+const threadWidth = 15;
 let topleft = [0.1 * canvasWidth, 0.1 * canvasHeight];
 let n = 4;
 let store = {
@@ -20,6 +20,7 @@ store.state[0] = 1;
 const tolerance = 30;
 let gap = (0.8 * canvasWidth - tolerance * 2 - threadWidth / (n - 1)) / (n - 1);
 let history = []
+let redoActions= []
 
 class Command {
     execute() {
@@ -36,7 +37,7 @@ class Command {
 }
 
 
-const initState = (colRow) => {
+const initState = (colRow, replay = false) => {
     if (!activeControls) return
     n = colRow;
     gap = (0.8 * canvasWidth - tolerance * 2 - threadWidth / (n - 1)) / (n - 1)
@@ -69,6 +70,8 @@ const initState = (colRow) => {
         cursor: 0, operator: "+", state: Array(n * n).fill(0),
     };
     store.state[0] = 1;
+   if(!replay) history = []
+    redoActions = []
 }
 const draw = (ctx, point, color) => {
     ctx.lineWidth = threadWidth;
@@ -79,6 +82,9 @@ const draw = (ctx, point, color) => {
     ctx.moveTo(point[0], point[1]);
 }
 
+const isConnected = (index) => {
+    return store.state[index] === 1 || store.state[index] === -1
+}
 const drawThreads = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -194,13 +200,12 @@ const delay = (ms) => {
 }
 
 const replay = async () => {
-    initState(n)
+    initState(n,true)
     activeControls = false
     for (let i = 0; i < history.length; i += 1) {
         history[i].execute();
         await delay(250)
     }
-    history = []
     activeControls = true
     await delay(1000)
     initState(n)
@@ -208,13 +213,15 @@ const replay = async () => {
 }
 
 const moveUp = () => {
-    if (!activeControls) return
+    if (!activeControls || store.cursor === n*n+n) return
+    redoActions=[]
     const canvAction = new CanvasUpAction()
     history.push(canvAction)
     canvAction.execute()
 }
 const moveDown = () => {
-    if (!activeControls) return
+    if (!activeControls || store.cursor === n*n+n) return
+    redoActions=[]
     const canvAction = new CanvasDownAction()
     history.push(canvAction)
     canvAction.execute()
@@ -250,6 +257,20 @@ class CanvasUpAction extends Command {
         unShift()
     }
 
+}
+const undoButtonClick= ()=>{
+    const action = history[history.length -1]
+    history.pop()
+    action.undo()
+    redoActions.push(action)
+}
+const redoButtonClick=()=>{
+    if(redoActions.length){
+        const action = redoActions[redoActions.length-1]
+        redoActions.pop()
+        action.execute()
+        history.push(action)
+    }
 }
 
 class CanvasDownAction extends Command {
