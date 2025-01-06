@@ -269,5 +269,21 @@ class CanvasDownAction extends Command {
 
 }
 
+function applyResponsiveStyles() {
+    const myElement = document.querySelectorAll('.floating-btn');
+    if (window.innerWidth < 800) {
+        for (let i = 0; i < myElement.length; ++i) {
+            myElement[i].style.display = 'block';
+        }
+    } else {
+        for (let i = 0; i < myElement.length; ++i) {
+            myElement[i].style.display = 'none';
+        }
+    }
+}
+
+applyResponsiveStyles();
+
+window.addEventListener('resize', applyResponsiveStyles);
 initState(n)
 drawThreads();
