@@ -271,7 +271,7 @@ class CanvasDownAction extends Command {
 
 function applyResponsiveStyles() {
     const myElement = document.querySelectorAll('.floating-btn');
-    if (window.innerWidth < 800) {
+    if (window.innerWidth < 1200) {
         for (let i = 0; i < myElement.length; ++i) {
             myElement[i].style.display = 'block';
         }
