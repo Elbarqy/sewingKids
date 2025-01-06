@@ -11,14 +11,33 @@ canvas.height = dim
 const {width: canvasWidth, height: canvasHeight} = canvas;
 const threadWidth = 30;
 let topleft = [0.1 * canvasWidth, 0.1 * canvasHeight];
-let n = 7;
+let n = 3;
 let store = {
     cursor: 0, operator: "+", state: Array(n * n).fill(0),
 };
+let activeControls = true;
 store.state[0] = 1;
 const tolerance = 30;
 let gap = (0.8 * canvasWidth - tolerance * 2 - threadWidth / (n - 1)) / (n - 1);
+let history = []
+
+class Command {
+    execute() {
+        throw new Error("execute() must be implemented");
+    }
+
+    undo() {
+        throw new Error("undo() must be implemented");
+    }
+
+    redo() {
+        throw new Error("redo() must be implemented");
+    }
+}
+
+
 const initState = (colRow) => {
+    if (!activeControls) return
     n = colRow;
     gap = (0.8 * canvasWidth - tolerance * 2 - threadWidth / (n - 1)) / (n - 1)
     topleft = [0.1 * canvasWidth, 0.1 * canvasHeight];
@@ -105,28 +124,31 @@ const drawThreads = () => {
                 }
             }
             if (i === 0 && store.state[index - n] === 1) {
-                let temp;
-                if (i === 0 || i >= n) {
-                    temp = point
-                } else {
-                    temp = rest[i + 1]
-                    i+=1
-                }
-                draw(ctx, temp, "blue")
+                draw(ctx, point, "blue")
                 continue
             }
+            const isReversin = (n - threadIdx) % 2 === 0 && i > 0 && i < 2 * n;
             if (i % 2 === 1 && i < n * 2) {
                 if (store.state[index] === -1) {
-                    ctx.beginPath();
+                    //draw next line and then begin next path
+                    if (isReversin) {
+                        ctx.moveTo(point[0], point[1]);
+                        draw(ctx, rest[i + 1], 'blue')
+                        i += 1;
+                        continue
+                    }
                     ctx.moveTo(point[0], point[1]);
                     continue;
                 }
             }
             draw(ctx, point, "blue")
+            if (isReversin) {
+                draw(ctx, rest[i + 1], 'blue')
+                i += 1
+            }
         }
     });
 }
-
 const shift = (to) => {
     if (store.cursor > n * n) return;
     const temp = [...store.state];
@@ -146,13 +168,64 @@ const shift = (to) => {
     drawThreads();
 };
 
+const unShift = () => {
+    if (store.cursor === 0) return;
+    const temp = [...store.state];
+    const nextCursor = store.operator === "+" ? store.cursor - 1 : store.cursor + 1;
+    temp[store.cursor] = 0;
+    store.state = temp;
+    if ((nextCursor + 1) % n === 0 && store.operator === "+") {
+        store.operator = "-";
+        store.cursor = nextCursor - n + 1;
+        return drawThreads();
+    } else if ((nextCursor) % n === 0 && store.operator === "-") {
+        store.operator = "+";
+        store.cursor = nextCursor - n - 1;
+        return drawThreads();
+    }
+    store.cursor = nextCursor;
+    drawThreads();
+};
+
+const delay = (ms) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
+const replay = async () => {
+    initState(n)
+    activeControls = false
+    for (let i = 0; i < history.length; i += 1) {
+        history[i].execute();
+        await delay(250)
+    }
+    history = []
+    activeControls = true
+    await delay(1000)
+    initState(n)
+    drawThreads()
+}
+
+const moveUp = () => {
+    if (!activeControls) return
+    const canvAction = new CanvasUpAction()
+    history.push(canvAction)
+    canvAction.execute()
+}
+const moveDown = () => {
+    if (!activeControls) return
+    const canvAction = new CanvasDownAction()
+    history.push(canvAction)
+    canvAction.execute()
+}
 window.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowDown":
-            shift(-1);
+            moveDown()
             break;
         case "ArrowUp":
-            shift(1);
+            moveUp()
             break;
     }
 });
@@ -161,6 +234,40 @@ slider.addEventListener('input', () => {
     initState(parseInt(slider.value))
     drawThreads();
 });
+
+class CanvasUpAction extends Command {
+    constructor() {
+        super();
+        this.action = "UP"
+        this.timeStamp = Date.now()
+    }
+
+    execute() {
+        shift(1);
+    }
+
+    undo() {
+        unShift()
+    }
+
+}
+
+class CanvasDownAction extends Command {
+    constructor() {
+        super();
+        this.action = "DOWN"
+        this.timeStamp = Date.now()
+    }
+
+    execute() {
+        shift(-1);
+    }
+
+    undo() {
+        unShift()
+    }
+
+}
 
 initState(n)
 drawThreads();
