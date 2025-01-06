@@ -11,7 +11,7 @@ canvas.height = dim
 const {width: canvasWidth, height: canvasHeight} = canvas;
 const threadWidth = 30;
 let topleft = [0.1 * canvasWidth, 0.1 * canvasHeight];
-let n = 3;
+let n = 4;
 let store = {
     cursor: 0, operator: "+", state: Array(n * n).fill(0),
 };

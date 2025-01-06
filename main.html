@@ -37,8 +37,12 @@
         </div>
     </div>
     <canvas id="canvas"></canvas>
-    <button class="floating-btn" style="left: 5%; bottom: 5%">^</button>
-    <button class="floating-btn" style="right: 5%; bottom: 5%">^</button>
+    <button onclick="moveDown()" class="floating-btn" style="left: 5%; bottom: 5%; transform: rotate(180deg)">
+        <i class="fa-solid fa-up-long"></i>
+    </button>
+    <button onclick="moveUp()" class="floating-btn" style="right: 5%; bottom: 5%;">
+        <i class="fa-solid fa-up-long"></i>
+    </button>
 </div>
 <script src="index.js"></script>
 </body>
