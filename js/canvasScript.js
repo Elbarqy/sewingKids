@@ -98,25 +98,24 @@ const initState = (colRow, replay = false) => {
 }
 const horTreatment = (grad, isVer) => {
     const color = isVer ? baseVerColor : baseHorColor
-    grad.addColorStop(0, brightness(color, -1));
-    grad.addColorStop(0.25, brightness(color, -2));
-    grad.addColorStop(0.75, brightness(color, -3));
-    grad.addColorStop(1, brightness(color, 3)); // Cyan
+    grad.addColorStop(0, color);
+    grad.addColorStop(0.70, 'white');
+    grad.addColorStop(0.75, 'white');
+    grad.addColorStop(1, color); // Cyan
     return grad
 };
 const curveTreatment = (grad, isRight = false) => {
     if (!isRight) {
-        grad.addColorStop(0, brightness(baseHorColor, 1));
-        grad.addColorStop(0.45, brightness(baseHorColor, -2));
-        grad.addColorStop(0.5, brightness(baseHorColor, -2));
-        grad.addColorStop(0.95, brightness(baseHorColor, 2));
-        grad.addColorStop(1, brightness(baseHorColor, 2)); // Cyan
+        grad.addColorStop(0, baseHorColor);
+        grad.addColorStop(0.75, 'white');
+        grad.addColorStop(0.8, 'white');
+        grad.addColorStop(1, baseHorColor + 'ab'); // Cyan
         return grad
     } else {
-        grad.addColorStop(1, brightness(baseHorColor, 2));
-        grad.addColorStop(0.5, brightness(baseHorColor, -2));
-        grad.addColorStop(0.7, brightness(baseHorColor, -1));
-        grad.addColorStop(0, brightness(baseHorColor, 2));
+        grad.addColorStop(1, baseHorColor);
+        grad.addColorStop(0.25, 'white');
+        grad.addColorStop(0.2, 'white');
+        grad.addColorStop(0, baseHorColor);
     }
     return grad
 };
@@ -154,8 +153,8 @@ const drawCurves = (ctx) => {
                 const [x1, y1, x2, y2, px, py] = controls(p, p2, true)
                 const curvGrade = curveTreatment(
                     ctx.createRadialGradient(
-                        p[0], (p2[1] + p[1]) / 2, offset + 10,
-                        p[0], (p2[1] + p[1]) / 2, offset - threadWidth + 10)
+                        p[0], (p2[1] + p[1]) / 2 + 15, offset + 10,
+                        p[0], (p2[1] + p[1]) / 2 + 10, offset - threadWidth + 10)
                 )
                 ctx.strokeStyle = (curvGrade)
                 ctx.bezierCurveTo(x1, y1, x2, y2, px, py);
@@ -171,8 +170,8 @@ const drawCurves = (ctx) => {
                 const [x1, y1, x2, y2, px, py] = controls(p, p2, false)
                 const curvGrade = curveTreatment(
                     ctx.createRadialGradient(
-                        p[0] - 10, (p2[1] + p[1]) / 2 - 60, offset + 55,
-                        p[0] - 10, (p2[1] + p[1]) / 2 + 10, offset - threadWidth),
+                        p[0], (p2[1] + p[1]) / 2, offset- threadWidth,
+                        p[0], (p2[1] + p[1]) / 2, offset+ threadWidth/2),
                     true
                 )
                 ctx.strokeStyle = (curvGrade)

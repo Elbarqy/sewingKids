@@ -1,3 +1,28 @@
+.floating-btn {
+    display: none;
+    position: fixed;
+
+    color: black;
+    border: 2px solid black;
+    aspect-ratio: 1/1;
+    width: 10vw;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.3s;
+}
+.floating-btn:hover {
+    background-color: #333;
+    transform: scale(1.1);
+}
+
+.tool-bar {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
 /* General body styling */
 body {
     font-family: Arial, sans-serif;
@@ -13,6 +38,7 @@ body {
     justify-content: center;
     align-content: center;
     flex-direction: column;
+    flex-wrap: wrap;
     gap: 25px;
 }
 
@@ -107,30 +133,5 @@ canvas {
 #color-value {
     margin-top: 10px;
     font-size: 18px;
-.floating-btn {
-    display: none;
-    position: fixed;
-
-    color: black;
-    border: 2px solid black;
-    aspect-ratio: 1/1;
-    width: 10vw;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, transform 0.3s;
-}
 
 /* Hover effect */
-.floating-btn:hover {
-    background-color: #333;
-    transform: scale(1.1);
-}
-
-.tool-bar {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
