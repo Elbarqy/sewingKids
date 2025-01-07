@@ -27,6 +27,11 @@ body {
     text-align: center;
 }
 
+canvas {
+    border: 1px solid #ccc;
+    cursor: crosshair;
+    border-radius: 20px;
+}
 /* Slider styling */
 #slider {
     -webkit-appearance: none;
@@ -90,7 +95,18 @@ body {
     color: black;
 }
 
-
+.color-picker-container {
+    text-align: center;
+}
+#color-preview {
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+    border: 2px solid #000;
+}
+#color-value {
+    margin-top: 10px;
+    font-size: 18px;
 .floating-btn {
     display: none;
     position: fixed;

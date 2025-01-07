@@ -4,10 +4,6 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/14796dbad7.js" crossorigin="anonymous"></script>
     <style>
-        canvas {
-            border: 1px solid #ccc;
-            cursor: crosshair;
-        }
 
         .controls {
             margin: 10px 0;
@@ -25,6 +21,18 @@
             <button onclick="replay()" class="btn">
                 <i class="fa-solid fa-person-chalkboard"></i>
             </button>
+            <div>
+                <label>
+                    Horizontal Color:
+                </label>
+                <input type="color" id="slider-hor" style="margin: 0 10px;" value="#b9b9b9">
+            </div>
+            <div>
+                <label>
+                    Vertical Color:
+                </label>
+                <input type="color" id="slider-ver" style="margin: 0 10px;" value="#b9b9b9">
+            </div>
         </div>
         <div>
             <button onclick="redoButtonClick()" class="btn">
@@ -35,10 +43,11 @@
             </button>
         </div>
     </div>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" tabindex="0"></canvas>
     <button onclick="moveDown()" class="floating-btn" style="left: 5%; bottom: 5%; transform: rotate(180deg)">
         <i class="fa-solid fa-up-long"></i>
     </button>
+
     <button onclick="moveUp()" class="floating-btn" style="right: 5%; bottom: 5%;">
         <i class="fa-solid fa-up-long"></i>
     </button>
