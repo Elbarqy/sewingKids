@@ -170,8 +170,8 @@ const drawCurves = (ctx) => {
                 const [x1, y1, x2, y2, px, py] = controls(p, p2, false)
                 const curvGrade = curveTreatment(
                     ctx.createRadialGradient(
-                        p[0], (p2[1] + p[1]) / 2, offset- threadWidth,
-                        p[0], (p2[1] + p[1]) / 2, offset+ threadWidth/2),
+                        p[0], (p2[1] + p[1]) / 2, offset - threadWidth,
+                        p[0], (p2[1] + p[1]) / 2, offset + threadWidth / 2),
                     true
                 )
                 ctx.strokeStyle = (curvGrade)
@@ -285,21 +285,21 @@ const shift = (to) => {
 
 const unShift = () => {
     if (store.cursor === 0) return;
-    const temp = [...store.state];
-    const nextCursor = store.operator === "+" ? store.cursor - 1 : store.cursor + 1;
-    temp[store.cursor] = 0;
-    store.state = temp;
-    if ((nextCursor + 1) % n === 0 && store.operator === "+") {
-        store.operator = "-";
-        store.cursor = nextCursor - n + 1;
-        return drawThreads();
-    } else if ((nextCursor) % n === 0 && store.operator === "-") {
-        store.operator = "+";
-        store.cursor = nextCursor - n - 1;
-        return drawThreads();
+    let prevCursor;
+    let operator = store.operator
+    if (store.cursor % n === 0 && store.operator === '+') {
+        prevCursor = store.cursor - n;
+        operator = "-"
+    } else if ((store.cursor + 1) % n === 0 && store.operator === '-') {
+        prevCursor = store.cursor - n;
+        operator = "+"
+    } else {
+        prevCursor = operator === "+" ? store.cursor - 1 : store.cursor + 1
     }
-    store.cursor = nextCursor;
-    drawThreads();
+    store.state[store.cursor] = 0;
+    store.cursor = prevCursor;
+    store.operator = operator;
+    drawThreads()
 };
 
 const delay = (ms) => {
@@ -311,8 +311,8 @@ const delay = (ms) => {
 const replay = async () => {
     initState(n, true)
     activeControls = false
-    for (let i = 0; i < history.length; i += 1) {
-        history[i].execute();
+    for (const element of history) {
+        element.execute();
         await delay(250)
     }
     activeControls = true
@@ -388,17 +388,23 @@ class CanvasUpAction extends Command {
 }
 
 const undoButtonClick = () => {
-    const action = history[history.length - 1]
-    history.pop()
-    action.undo()
+    if (history.length === 0) return
+    const action = history.pop()
+    unShift();
     redoActions.push(action)
 }
 const redoButtonClick = () => {
     if (redoActions.length) {
-        const action = redoActions[redoActions.length - 1]
-        redoActions.pop()
-        action.execute()
-        history.push(action)
+        const action = redoActions.pop()
+        if (action.action === 'UP') {
+            shift(1)
+        } else {
+            shift(-1)
+        }
+        history.push({
+            ...action,
+            timeStamp: Date.now()
+        })
     }
 }
 
@@ -422,12 +428,12 @@ class CanvasDownAction extends Command {
 function applyResponsiveStyles() {
     const myElement = document.querySelectorAll('.floating-btn');
     if (window.innerWidth < 1200) {
-        for (let i = 0; i < myElement.length; ++i) {
-            myElement[i].style.display = 'block';
+        for (const element of myElement) {
+            element.style.display = 'block';
         }
     } else {
-        for (let i = 0; i < myElement.length; ++i) {
-            myElement[i].style.display = 'none';
+        for (const element of myElement) {
+            element.style.display = 'none';
         }
     }
 }
