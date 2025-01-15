@@ -186,6 +186,10 @@ const isConnected = (index) => {
     return store.state[index] === 1 || store.state[index] === -1
 }
 const drawThreads = () => {
+    console.log({
+        cur: store.cursor,
+        op: store.operator
+    })
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -288,10 +292,12 @@ const unShift = () => {
     let prevCursor;
     let operator = store.operator
     if (store.cursor % n === 0 && store.operator === '+') {
+        // store.state[store.cursor - 1] = 0
         prevCursor = store.cursor - n;
         operator = "-"
-    } else if ((store.cursor + 1) % n === 0 && store.operator === '-') {
-        prevCursor = store.cursor - n;
+    } else if ((store.cursor) % n === 0 && store.operator === '-' && store.state[store.cursor + 1] === 0) {
+        prevCursor = store.cursor - n - 2;
+        store.state[prevCursor + 1] = 0;
         operator = "+"
     } else {
         prevCursor = operator === "+" ? store.cursor - 1 : store.cursor + 1

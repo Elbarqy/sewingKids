@@ -12,6 +12,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, transform 0.3s;
 }
+
 .floating-btn:hover {
     background-color: #333;
     transform: scale(1.1);
@@ -33,7 +34,8 @@ body {
     margin: 0;
     background-color: white;
 }
-.container{
+
+.container {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -58,6 +60,7 @@ canvas {
     cursor: crosshair;
     border-radius: 20px;
 }
+
 /* Slider styling */
 #slider {
     -webkit-appearance: none;
@@ -110,6 +113,11 @@ canvas {
     border-radius: 5px;
 }
 
+.control {
+    width: 150px;
+    aspect-ratio: 2/1;
+}
+
 /* Hover effect */
 .btn:hover {
     background-color: black;
@@ -124,12 +132,14 @@ canvas {
 .color-picker-container {
     text-align: center;
 }
+
 #color-preview {
     width: 100px;
     height: 100px;
     margin: 20px auto;
     border: 2px solid #000;
 }
+
 #color-value {
     margin-top: 10px;
     font-size: 18px;
