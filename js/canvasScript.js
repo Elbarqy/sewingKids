@@ -196,7 +196,7 @@ const drawThreads = () => {
     // Create a linear gradient
 
 
-    verticalThreads.map((thread, i) => {
+    verticalThreads.forEach((thread, i) => {
         ctx.beginPath();
         ctx.moveTo(thread.points[0][0], thread.points[0][1]);
         thread.points.slice(1).forEach((point, pidx) => {
@@ -213,7 +213,7 @@ const drawThreads = () => {
         });
     });
 
-    [...horizontalThreads].map((thread, threadIdx) => {
+    [...horizontalThreads].forEach((thread, threadIdx) => {
         ctx.beginPath();
         const stateSpace = n * n;
         ctx.moveTo(thread.points[0][0], thread.points[0][1]);
@@ -317,6 +317,10 @@ const delay = (ms) => {
 const replay = async () => {
     initState(n, true)
     activeControls = false
+    const hisStr = btoa(encodeURIComponent(JSON.stringify(history)).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+        return String.fromCharCode('0x' + p1);
+    }));
+    navigator.clipboard.writeText(hisStr);
     for (const element of history) {
         element.execute();
         await delay(250)
