@@ -143,7 +143,7 @@ const drawCurves = (ctx) => {
     const stateSpace = n * n
 
     for (let i = 0; i < n; i += 1) {
-        if ((i + 1) % 2 === 1) {
+        if ((i + 1) % 2 === (n + 1) % 2) {
             const index = stateSpace - n * i - 1
             if (isConnected(index) && isConnected(index - n)) {
                 ctx.beginPath()
