@@ -1,6 +1,9 @@
 <!doctype html>
-<html>
+<html lang="ar">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weaving Pattern Simulator</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/14796dbad7.js" crossorigin="anonymous"></script>
     <style>
@@ -14,7 +17,7 @@
 <div class="container">
     <div class="slider-container">
         <div>difficulty: <span id="slider-value"></span></div>
-        <input type="range" id="slider" min="8" max="20" value="10" step="1">
+        <input type="range" id="slider" min="4" max="20" value="4" step="1">
     </div>
     <div class="tool-bar">
         <div>
@@ -32,6 +35,33 @@
                     Vertical Color:
                 </label>
                 <input type="color" id="slider-ver" style="margin: 0 10px;" value="#b9b9b9">
+            </div>
+
+            <!-- Dropdown Menu -->
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" onclick="toggleDropdown()">
+                    Options <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="#" class="dropdown-item" onclick="handleMenuAction('1'); return false;">
+                        أطلس 12
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" onclick="handleMenuAction('2'); return false;">
+                        سادة منتظم في إتجاه اللحمة
+                    </a>
+                    <a href="#" class="dropdown-item" onclick="handleMenuAction('4'); return false;">
+                        نسيج مبرد منتظم ٢/١ </a>
+                    <a href="#" class="dropdown-item" onclick="handleMenuAction('3'); return false;">
+                        نسيج مبرد منتظم ٣/٢
+                    </a>
+
+                    <a href="#" class="dropdown-item" onclick="handleMenuAction('5'); return false;">
+                        نسيج مبرد غير منتظم </a>
+                    <a href="#" class="dropdown-item" onclick="handleMenuAction('6'); return false;">
+                        نسيج مبرد منتظم ٣/٢
+                    </a>
+                </div>
             </div>
         </div>
         <div>
