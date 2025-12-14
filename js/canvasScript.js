@@ -2,7 +2,7 @@ const CANVAS_SCALE = 0.8;
 const CANVAS_INSET = 0.1;
 const CANVAS_CONTENT_AREA = 0.8;
 const DEFAULT_THREAD_COLOR = "#8c8c8c";
-const THREAD_WIDTH = 50;
+let THREAD_WIDTH = 50;
 const GRID_TOLERANCE = 30;
 const REPLAY_DELAY_MS = 250;
 const POST_REPLAY_DELAY_MS = 1000;
@@ -22,7 +22,7 @@ let baseHorizontalColor = DEFAULT_THREAD_COLOR;
 let baseVerticalColor = DEFAULT_THREAD_COLOR;
 let verticalThreads;
 let horizontalThreads;
-let gridSize = 10;
+let gridSize = 4;
 let topLeftCorner = [CANVAS_INSET * canvasWidth, CANVAS_INSET * canvasHeight];
 let threadGap = (CANVAS_CONTENT_AREA * canvasWidth - GRID_TOLERANCE * 2 - THREAD_WIDTH / (gridSize - 1)) / (gridSize - 1);
 let history = [];
@@ -74,7 +74,15 @@ function brightness(color, adder = 1) {
 
 const initState = (newGridSize, replay = false) => {
     if (!activeControls) return;
-
+    if(  newGridSize > 10 && newGridSize <= 12){
+        THREAD_WIDTH = 35
+    }else if(newGridSize > 12 && newGridSize <= 15){
+        THREAD_WIDTH = 25
+    }else if(newGridSize > 15){
+        THREAD_WIDTH = 25
+    }else {
+        THREAD_WIDTH = 40;
+    }
     gridSize = newGridSize;
     threadGap = (CANVAS_CONTENT_AREA * canvasWidth - GRID_TOLERANCE * 2 - THREAD_WIDTH / (gridSize - 1)) / (gridSize - 1);
     topLeftCorner = [CANVAS_INSET * canvasWidth, CANVAS_INSET * canvasHeight];
@@ -700,5 +708,6 @@ document.addEventListener('click', (event) => {
 // INITIALIZATION
 // ============================================
 
+slider.setAttribute("value", 4)
 initState(gridSize);
 drawThreads();
