@@ -74,19 +74,18 @@ function brightness(color, adder = 1) {
 
 const initState = (newGridSize, replay = false) => {
     if (!activeControls) return;
-    if (window.innerWidth < 450) {
-        THREAD_WIDTH = 8
+
+    if (newGridSize > 10 && newGridSize <= 12) {
+        THREAD_WIDTH = 35
+    } else if (newGridSize > 12 && newGridSize <= 15) {
+        THREAD_WIDTH = 25
+    } else if (newGridSize > 15) {
+        THREAD_WIDTH = 25
     } else {
-        if (newGridSize > 10 && newGridSize <= 12) {
-            THREAD_WIDTH = 35
-        } else if (newGridSize > 12 && newGridSize <= 15) {
-            THREAD_WIDTH = 25
-        } else if (newGridSize > 15) {
-            THREAD_WIDTH = 25
-        } else {
-            THREAD_WIDTH = 40;
-        }
+        THREAD_WIDTH = 40;
     }
+    THREAD_WIDTH = THREAD_WIDTH / (innerWidth < 750 ? 3 : 1);
+
     gridSize = newGridSize;
     threadGap = (CANVAS_CONTENT_AREA * canvasWidth - GRID_TOLERANCE * 2 - THREAD_WIDTH / (gridSize - 1)) / (gridSize - 1);
     topLeftCorner = [CANVAS_INSET * canvasWidth, CANVAS_INSET * canvasHeight];
